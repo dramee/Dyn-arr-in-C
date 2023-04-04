@@ -38,10 +38,12 @@ void dynArrAddTail(dynArr* arr, int num) {
 }
 
 void dynArrDelTail(dynArr* arr) {
-    arr->len--;
-    if (arr->len <= (arr->cap / 4)) {
-        arr->cap /= 2;
-        arr->start = (int*) realloc(arr->start, sizeof(int) * arr->cap);
+    if (arr->len > 0) {
+        arr->len--;
+        if (arr->len <= (arr->cap / 4)) {
+            arr->cap /= 2;
+            arr->start = (int *) realloc(arr->start, sizeof(int) * arr->cap);
+        }
     }
 }
 
@@ -63,6 +65,16 @@ void printDynArrInfo(dynArr arr){
     printf("%zu\n", arr.cap);
 }
 
+int getElementDynArr(dynArr arr, size_t i){
+    if (i < arr.len) {
+        return arr.start[i];
+    }
+    else {
+        printf("Index out of range");
+        exit(1);
+    }
+}
+
 
 
 int main() {
@@ -76,6 +88,7 @@ int main() {
         printf("\n");
         printDynArr(arr);
     }
+    printf("%d\n\n", getElementDynArr(arr, 3));
     while (arr.len > 2) {
         dynArrDelTail(&arr);
         printDynArrInfo(arr);
