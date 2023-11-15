@@ -21,21 +21,18 @@ void nullCheck(void* ptr){ // check reallocate return for NULL
 }
 
 void dynArrAddTail(dynArr* arr, int num) {
-    if (arr->cap == 0) {
-        arr->cap = 1;
+    if ((arr->len + 1) > arr->cap) {
+        if (arr->cap == 0) {
+            arr->cap = 1;
+        } else {
+            arr->cap *= 2;
+        }
         arr->start = (int*) realloc(arr->start, sizeof(int) * arr->cap);
         nullCheck(arr->start);
-        arr->start[arr->len++] = num;
     }
-    else {
-        if ((arr->len + 1) > arr->cap) {
-            arr->cap *= 2;
-            arr->start = (int*) realloc(arr->start, sizeof(int) * arr->cap);
-            nullCheck(arr->start);
-        }
-        arr->start[arr->len++] = num;
-    }
+    arr->start[arr->len++] = num;
 }
+
 
 void dynArrDelTail(dynArr* arr) {
     if (arr->len > 0) {
@@ -43,6 +40,7 @@ void dynArrDelTail(dynArr* arr) {
         if (arr->len <= (arr->cap / 4)) {
             arr->cap /= 2;
             arr->start = (int *) realloc(arr->start, sizeof(int) * arr->cap);
+            nullCheck(arr->start);
         }
     }
 }
